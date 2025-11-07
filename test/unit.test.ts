@@ -8,7 +8,7 @@ describe('filterSessionsByPath', () => {
       { sessionId: '-Users-dreamiurg-src-project-a' },
       { sessionId: '-Users-dreamiurg-src-project-b' },
     ];
-    const result = filterSessionsByPath(sessions, '/Users/dreamiurg/src/project-a');
+    const result = filterSessionsByPath(sessions as any, '/Users/dreamiurg/src/project-a');
     strictEqual(result.length, 1);
     strictEqual(result[0].sessionId, '-Users-dreamiurg-src-project-a');
   });
@@ -19,7 +19,7 @@ describe('filterSessionsByPath', () => {
       { sessionId: '-Users-dreamiurg-src-new-location-my-project' },
       { sessionId: '-Users-dreamiurg-src-different-project' },
     ];
-    const result = filterSessionsByPath(sessions, '/Users/dreamiurg/src/current/my-project');
+    const result = filterSessionsByPath(sessions as any, '/Users/dreamiurg/src/current/my-project');
     strictEqual(result.length, 2);
     strictEqual(result[0].sessionId, '-Users-dreamiurg-src-old-location-my-project');
     strictEqual(result[1].sessionId, '-Users-dreamiurg-src-new-location-my-project');
@@ -27,13 +27,13 @@ describe('filterSessionsByPath', () => {
 
   it('should prioritize projectPath over sessionId', () => {
     const sessions = [{ sessionId: '-wrong-path', projectPath: '/Users/dreamiurg/src/correct' }];
-    const result = filterSessionsByPath(sessions, '/Users/dreamiurg/src/correct');
+    const result = filterSessionsByPath(sessions as any, '/Users/dreamiurg/src/correct');
     strictEqual(result.length, 1);
   });
 
   it('should return empty array for no matches', () => {
     const sessions = [{ sessionId: '-Users-dreamiurg-src-other' }];
-    const result = filterSessionsByPath(sessions, '/Users/dreamiurg/src/nomatch');
+    const result = filterSessionsByPath(sessions as any, '/Users/dreamiurg/src/nomatch');
     strictEqual(result.length, 0);
   });
 });
@@ -63,14 +63,14 @@ describe('aggregateData', () => {
         totalCost: 2.0,
       },
     ];
-    const result = aggregateData(sessions);
-    strictEqual(result.totalInputTokens, 250);
-    strictEqual(result.totalOutputTokens, 125);
-    strictEqual(result.totalCacheCreationTokens, 450);
-    strictEqual(result.totalCacheReadTokens, 650);
-    strictEqual(result.totalTokens, 1475);
-    strictEqual(result.totalCost, 3.5);
-    strictEqual(result.sessionCount, 2);
+    const result = aggregateData(sessions as any);
+    strictEqual(result!.totalInputTokens, 250);
+    strictEqual(result!.totalOutputTokens, 125);
+    strictEqual(result!.totalCacheCreationTokens, 450);
+    strictEqual(result!.totalCacheReadTokens, 650);
+    strictEqual(result!.totalTokens, 1475);
+    strictEqual(result!.totalCost, 3.5);
+    strictEqual(result!.sessionCount, 2);
   });
 
   it('should track date range correctly', () => {
@@ -79,9 +79,9 @@ describe('aggregateData', () => {
       { lastActivity: '2025-11-06' },
       { lastActivity: '2025-10-20' },
     ];
-    const result = aggregateData(sessions);
-    strictEqual(result.firstActivity, '2025-10-15');
-    strictEqual(result.lastActivity, '2025-11-06');
+    const result = aggregateData(sessions as any);
+    strictEqual(result!.firstActivity, '2025-10-15');
+    strictEqual(result!.lastActivity, '2025-11-06');
   });
 
   it('should collect unique models', () => {
@@ -89,10 +89,10 @@ describe('aggregateData', () => {
       { modelsUsed: ['claude-sonnet-4-5', 'claude-haiku-4-5'] },
       { modelsUsed: ['claude-sonnet-4-5'] },
     ];
-    const result = aggregateData(sessions);
-    strictEqual(result.models.size, 2);
-    strictEqual(result.models.has('claude-sonnet-4-5'), true);
-    strictEqual(result.models.has('claude-haiku-4-5'), true);
+    const result = aggregateData(sessions as any);
+    strictEqual(result!.models.size, 2);
+    strictEqual(result!.models.has('claude-sonnet-4-5'), true);
+    strictEqual(result!.models.has('claude-haiku-4-5'), true);
   });
 });
 

@@ -21,7 +21,6 @@ Analyzes your Claude Code session history and shows aggregated statistics for a 
 ## Requirements
 
 - Node.js >= 18
-- `npx` (for running ccusage)
 
 ## Installation
 
@@ -73,9 +72,9 @@ Estimated Cost: $45.67 USD
 
 ## How it works
 
-TokenKing is a lightweight wrapper around [ccusage](https://github.com/ryoppippi/ccusage). It calls `ccusage session --json` to get all Claude Code session data, filters sessions matching your project path, then aggregates and displays the results.
+TokenKing is built with TypeScript and uses [ccusage](https://github.com/ryoppippi/ccusage) as a dependency to read Claude Code session data. It loads all sessions, filters by project path (with support for moved directories via basename matching), then aggregates and displays the results.
 
 ## Dependencies
 
+- `ccusage` - Reads Claude Code session data from `~/.claude/projects/`
 - `picocolors` - Terminal colors for output formatting
-- `ccusage` - Used via npx to read Claude Code session data

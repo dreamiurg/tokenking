@@ -1,49 +1,68 @@
 #!/usr/bin/env node
 
-import { execSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { existsSync } from 'node:fs';
 import pc from 'picocolors';
+import { loadSessionData } from 'ccusage/data-loader';
+
+interface Session {
+  sessionId: string;
+  projectPath?: string;
+  inputTokens?: number;
+  outputTokens?: number;
+  cacheCreationTokens?: number;
+  cacheReadTokens?: number;
+  totalTokens?: number;
+  totalCost?: number;
+  lastActivity?: string;
+  modelsUsed?: string[];
+}
+
+interface AggregatedData {
+  sessionCount: number;
+  totalInputTokens: number;
+  totalOutputTokens: number;
+  totalCacheCreationTokens: number;
+  totalCacheReadTokens: number;
+  totalTokens: number;
+  totalCost: number;
+  firstActivity: string | null;
+  lastActivity: string | null;
+  models: Set<string>;
+  sessionPaths: Set<string>;
+}
 
 /**
  * Format a number with thousand separators
  */
-function formatNumber(num) {
+function formatNumber(num: number): string {
   return num.toLocaleString('en-US');
 }
 
 /**
- * Get ccusage session data
+ * Load and parse ccusage session data
  */
-function getCcusageData() {
+async function getCcusageData(): Promise<Session[]> {
   try {
-    const output = execSync('npx ccusage@latest session --json --since 20240101', {
-      encoding: 'utf8',
-      stdio: ['inherit', 'pipe', 'pipe'],
-      maxBuffer: 50 * 1024 * 1024, // 50MB buffer for large outputs
-    });
-
-    const data = JSON.parse(output);
-    return data.sessions || [];
+    const sessions = await loadSessionData();
+    return (sessions || []) as Session[];
   } catch (error) {
-    if (error.message.includes('not found') || error.message.includes('command not found')) {
-      console.error(pc.red('Error: ccusage is not available.'));
-      console.error('Please ensure npx is installed and working.');
-      process.exit(2);
+    console.error(pc.red('Error: Failed to load Claude Code session data.'));
+    if (error instanceof Error) {
+      console.error('Details:', error.message);
     }
-    throw error;
+    process.exit(2);
   }
 }
 
 /**
  * Filter sessions by project path
  */
-function filterSessionsByPath(sessions, targetPath) {
+export function filterSessionsByPath(sessions: Session[], targetPath: string): Session[] {
   const normalizedTarget = path.resolve(targetPath);
   const targetBasename = path.basename(normalizedTarget);
 
   return sessions.filter((session) => {
-    // ccusage uses sessionId as path-like identifier, but also has projectPath
     // Check if the session's projectPath matches
     if (session.projectPath && session.projectPath !== 'Unknown Project') {
       return session.projectPath === normalizedTarget;
@@ -74,12 +93,12 @@ function filterSessionsByPath(sessions, targetPath) {
 /**
  * Aggregate session data
  */
-function aggregateData(sessions) {
+export function aggregateData(sessions: Session[]): AggregatedData | null {
   if (sessions.length === 0) {
     return null;
   }
 
-  const result = {
+  const result: AggregatedData = {
     sessionCount: sessions.length,
     totalInputTokens: 0,
     totalOutputTokens: 0,
@@ -128,11 +147,11 @@ function aggregateData(sessions) {
 /**
  * Calculate date range in days
  */
-function calculateDateRange(firstDate, lastDate) {
+export function calculateDateRange(firstDate: string | null, lastDate: string | null): number {
   if (!firstDate || !lastDate) return 0;
   const first = new Date(firstDate);
   const last = new Date(lastDate);
-  const diffTime = Math.abs(last - first);
+  const diffTime = Math.abs(last.getTime() - first.getTime());
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   return diffDays;
 }
@@ -140,7 +159,7 @@ function calculateDateRange(firstDate, lastDate) {
 /**
  * Display the report
  */
-function displayReport(targetPath, data) {
+function displayReport(targetPath: string, data: AggregatedData | null): void {
   const resolvedPath = path.resolve(targetPath);
 
   console.log('');
@@ -214,7 +233,7 @@ function displayReport(targetPath, data) {
 /**
  * Main function
  */
-function main() {
+async function main(): Promise<void> {
   const args = process.argv.slice(2);
 
   // Get target path from args or use current directory
@@ -228,7 +247,7 @@ function main() {
 
   // Get ccusage data
   console.log(pc.dim('Fetching Claude Code session data...'));
-  const sessions = getCcusageData();
+  const sessions = await getCcusageData();
 
   // Filter by path
   const matchingSessions = filterSessionsByPath(sessions, targetPath);
@@ -246,10 +265,10 @@ function main() {
   process.exit(0);
 }
 
-// Export functions for testing
-export { filterSessionsByPath, aggregateData, calculateDateRange };
-
 // Only run main if this file is executed directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  main();
+  main().catch((error) => {
+    console.error(pc.red('Unexpected error:'), error);
+    process.exit(1);
+  });
 }
