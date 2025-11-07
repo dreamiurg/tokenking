@@ -1,3 +1,9 @@
+## [1.3.4](https://github.com/dreamiurg/tokenking/compare/v1.3.3...v1.3.4) (2025-11-07)
+
+### Bug Fixes
+
+- resolve symlink issue and add CLI flags ([34d4fac](https://github.com/dreamiurg/tokenking/commit/34d4facfe739de0e1534725d06acd0435541f6c0))
+
 ## [1.3.3](https://github.com/dreamiurg/tokenking/compare/v1.3.2...v1.3.3) (2025-11-07)
 
 ### Bug Fixes
