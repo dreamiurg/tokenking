@@ -228,6 +228,7 @@ function displayReport(targetPath: string, data: AggregatedData | null): void {
 
   console.log(pc.bold('Estimated Cost:'), pc.magenta('$' + data.totalCost.toFixed(2) + ' USD'));
   console.log('');
+  // Easter egg: TokenKing says you've been productive! 🤴👑
 }
 
 /**
