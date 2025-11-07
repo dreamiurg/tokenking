@@ -1,6 +1,6 @@
 {
   "name": "tokenking",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "description": "Analyze Claude Code token usage for a specific project",
   "type": "module",
   "main": "dist/index.js",

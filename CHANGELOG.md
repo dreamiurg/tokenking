@@ -1,3 +1,9 @@
+## [1.3.6](https://github.com/dreamiurg/tokenking/compare/v1.3.5...v1.3.6) (2025-11-07)
+
+### Bug Fixes
+
+- correct semantic-release action output names ([6cc122f](https://github.com/dreamiurg/tokenking/commit/6cc122fa412b9637e2442f57d6e768bc8e5ed507))
+
 ## [1.3.5](https://github.com/dreamiurg/tokenking/compare/v1.3.4...v1.3.5) (2025-11-07)
 
 ### Bug Fixes
