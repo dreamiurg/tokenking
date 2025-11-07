@@ -1,3 +1,9 @@
+# [1.2.0](https://github.com/dreamiurg/tokenking/compare/v1.1.1...v1.2.0) (2025-11-07)
+
+### Features
+
+- add easter egg message to report output ([3be815f](https://github.com/dreamiurg/tokenking/commit/3be815f95f6fa76b055d9ef32682a199fb67d221))
+
 ## [1.1.1](https://github.com/dreamiurg/tokenking/compare/v1.1.0...v1.1.1) (2025-11-07)
 
 ### Bug Fixes
