@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/dreamiurg/tokenking/compare/v1.1.0...v1.1.1) (2025-11-07)
+
+### Bug Fixes
+
+- add shebang to compiled CLI binary ([fb1c63e](https://github.com/dreamiurg/tokenking/commit/fb1c63ecf96f998c01838917c6bc57a0b25eb7c2))
+
 # [1.1.0](https://github.com/dreamiurg/tokenking/compare/v1.0.1...v1.1.0) (2025-11-07)
 
 ### Features
