@@ -1,3 +1,9 @@
+## [1.3.2](https://github.com/dreamiurg/tokenking/compare/v1.3.1...v1.3.2) (2025-11-07)
+
+### Bug Fixes
+
+- upgrade npm to v11+ for trusted publishing support ([c18c6c6](https://github.com/dreamiurg/tokenking/commit/c18c6c6e6c30180b6b4ed72fcfc726455a9870d8))
+
 ## [1.3.1](https://github.com/dreamiurg/tokenking/compare/v1.3.0...v1.3.1) (2025-11-07)
 
 ### Bug Fixes
