@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/dreamiurg/tokenking/compare/v1.0.0...v1.0.1) (2025-11-07)
+
+### Bug Fixes
+
+- remove deprecated husky shebang format ([98e09e3](https://github.com/dreamiurg/tokenking/commit/98e09e3f90b5ee67ff9c88197899de503865c5a6))
+
 # 1.0.0 (2025-11-07)
 
 ### Bug Fixes
