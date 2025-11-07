@@ -1,3 +1,10 @@
+## [1.3.3](https://github.com/dreamiurg/tokenking/compare/v1.3.2...v1.3.3) (2025-11-07)
+
+### Bug Fixes
+
+- make integration tests work in CI environment ([466725a](https://github.com/dreamiurg/tokenking/commit/466725a1ba982fda605aa103b6f726a385144d0c))
+- resolve symlink issue and add CLI flags ([354b6d4](https://github.com/dreamiurg/tokenking/commit/354b6d4b9d39a03b598e5ce5995b49ce198e2205))
+
 ## [1.3.2](https://github.com/dreamiurg/tokenking/compare/v1.3.1...v1.3.2) (2025-11-07)
 
 ### Bug Fixes
