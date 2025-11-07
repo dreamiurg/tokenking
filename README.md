@@ -2,6 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/tokenking.svg)](https://www.npmjs.com/package/tokenking)
 [![npm downloads](https://img.shields.io/npm/dm/tokenking.svg)](https://www.npmjs.com/package/tokenking)
+[![GitHub Release](https://img.shields.io/github/v/release/dreamiurg/tokenking)](https://github.com/dreamiurg/tokenking/releases)
 [![CI/Release](https://github.com/dreamiurg/tokenking/actions/workflows/release.yml/badge.svg)](https://github.com/dreamiurg/tokenking/actions/workflows/release.yml)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
