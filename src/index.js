@@ -165,7 +165,14 @@ function displayReport(targetPath, data) {
   // Show matched paths if more than one or if path differs from target
   if (data.sessionPaths && data.sessionPaths.size > 0) {
     const targetSessionId = '-' + resolvedPath.replace(/^\//, '').replace(/\//g, '-');
-    const pathArray = Array.from(data.sessionPaths).sort();
+    const pathArray = Array.from(data.sessionPaths).sort((a, b) => {
+      // Sort exact match first, then alphabetically
+      const aIsExact = a === targetSessionId;
+      const bIsExact = b === targetSessionId;
+      if (aIsExact && !bIsExact) return -1;
+      if (!aIsExact && bIsExact) return 1;
+      return a.localeCompare(b);
+    });
 
     // Only show if multiple paths or path doesn't match exactly
     if (pathArray.length > 1 || pathArray[0] !== targetSessionId) {
