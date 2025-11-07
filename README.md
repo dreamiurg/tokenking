@@ -41,6 +41,12 @@ tokenking .
 # Analyze specific project
 tokenking ~/src/my-project
 
+# Show help
+tokenking --help
+
+# Show version
+tokenking --version
+
 # Or use with npx
 npx tokenking ~/src/my-project
 ```
