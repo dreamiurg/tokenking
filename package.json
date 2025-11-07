@@ -1,26 +1,43 @@
 {
   "name": "tokenking",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "description": "Analyze Claude Code token usage for a specific project",
   "type": "module",
   "main": "src/index.js",
   "bin": {
     "tokenking": "./src/index.js"
   },
+  "files": [
+    "src/",
+    "README.md"
+  ],
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "semantic-release": "semantic-release"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dreamiurg/tokenking.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dreamiurg/tokenking/issues"
+  },
+  "homepage": "https://github.com/dreamiurg/tokenking#readme",
   "keywords": [
     "claude",
     "claude-code",
     "tokens",
     "usage",
-    "analytics"
+    "analytics",
+    "cli"
   ],
   "author": "dreamiurg",
   "license": "MIT",
   "dependencies": {
     "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "semantic-release": "^24.2.0"
   },
   "engines": {
     "node": ">=18.0.0"
