@@ -1,3 +1,9 @@
+# [1.3.0](https://github.com/dreamiurg/tokenking/compare/v1.2.0...v1.3.0) (2025-11-07)
+
+### Features
+
+- add royal court approval message ([359879d](https://github.com/dreamiurg/tokenking/commit/359879d3e3580a5c1557fbe3b4ce464e97404db8))
+
 # [1.2.0](https://github.com/dreamiurg/tokenking/compare/v1.1.1...v1.2.0) (2025-11-07)
 
 ### Features
