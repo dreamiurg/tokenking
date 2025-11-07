@@ -93,6 +93,7 @@ function aggregateData(sessions) {
     firstActivity: null,
     lastActivity: null,
     models: new Set(),
+    sessionPaths: new Set(),
   };
 
   sessions.forEach(session => {
@@ -116,6 +117,11 @@ function aggregateData(sessions) {
     // Collect models
     if (session.modelsUsed && Array.isArray(session.modelsUsed)) {
       session.modelsUsed.forEach(model => result.models.add(model));
+    }
+
+    // Track session IDs
+    if (session.sessionId) {
+      result.sessionPaths.add(session.sessionId);
     }
   });
 
@@ -155,6 +161,26 @@ function displayReport(targetPath, data) {
   const dateRange = calculateDateRange(data.firstActivity, data.lastActivity);
 
   console.log(pc.bold('Sessions:'), formatNumber(data.sessionCount));
+
+  // Show matched paths if more than one or if path differs from target
+  if (data.sessionPaths && data.sessionPaths.size > 0) {
+    const targetSessionId = '-' + resolvedPath.replace(/^\//, '').replace(/\//g, '-');
+    const pathArray = Array.from(data.sessionPaths).sort();
+
+    // Only show if multiple paths or path doesn't match exactly
+    if (pathArray.length > 1 || pathArray[0] !== targetSessionId) {
+      console.log(pc.bold('Matched Paths:'));
+      pathArray.forEach(sessionPath => {
+        const isExact = sessionPath === targetSessionId;
+        if (isExact) {
+          console.log(pc.dim('  •'), pc.green(sessionPath), pc.dim('(exact)'));
+        } else {
+          console.log(pc.dim('  •'), pc.yellow(sessionPath), pc.dim('(basename match)'));
+        }
+      });
+    }
+  }
+
   if (data.firstActivity && data.lastActivity) {
     console.log(pc.bold('First Session:'), data.firstActivity);
     console.log(pc.bold('Last Session:'), data.lastActivity);
