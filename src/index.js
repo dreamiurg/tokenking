@@ -51,10 +51,11 @@ function filterSessionsByPath(sessions, targetPath) {
       return session.projectPath === normalizedTarget;
     }
 
-    // Fallback: try to extract path from sessionId (format: -Users-dreamiurg-src-project)
+    // Fallback: convert target path to sessionId format and compare
+    // sessionId format: -Users-dreamiurg-src-project (path with slashes replaced by dashes)
     if (session.sessionId) {
-      const pathFromId = '/' + session.sessionId.replace(/^-/, '').replace(/-/g, '/');
-      return pathFromId === normalizedTarget || pathFromId.startsWith(normalizedTarget + '/');
+      const expectedSessionId = '-' + normalizedTarget.replace(/^\//, '').replace(/\//g, '-');
+      return session.sessionId === expectedSessionId;
     }
 
     return false;
