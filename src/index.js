@@ -43,6 +43,7 @@ function getCcusageData() {
  */
 function filterSessionsByPath(sessions, targetPath) {
   const normalizedTarget = path.resolve(targetPath);
+  const targetBasename = path.basename(normalizedTarget);
 
   return sessions.filter(session => {
     // ccusage uses sessionId as path-like identifier, but also has projectPath
@@ -55,7 +56,18 @@ function filterSessionsByPath(sessions, targetPath) {
     // sessionId format: -Users-dreamiurg-src-project (path with slashes replaced by dashes)
     if (session.sessionId) {
       const expectedSessionId = '-' + normalizedTarget.replace(/^\//, '').replace(/\//g, '-');
-      return session.sessionId === expectedSessionId;
+
+      // Try exact match first
+      if (session.sessionId === expectedSessionId) {
+        return true;
+      }
+
+      // Also match by basename - catches moved projects
+      // Check if sessionId ends with the target directory name
+      const expectedSuffix = '-' + targetBasename;
+      if (session.sessionId.endsWith(expectedSuffix)) {
+        return true;
+      }
     }
 
     return false;
