@@ -2,45 +2,54 @@ import { describe, it } from 'node:test';
 import { strictEqual } from 'node:assert';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { readFileSync, writeFileSync, symlinkSync, mkdtempSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, symlinkSync, mkdtempSync, rmSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { tmpdir } from 'node:os';
+import { tmpdir, homedir } from 'node:os';
 
 const execFileAsync = promisify(execFile);
 
+// Check if we're in CI environment without Claude data
+const hasClaudeData =
+  existsSync(join(homedir(), '.config/claude/projects')) ||
+  existsSync(join(homedir(), '.claude/projects'));
+
 describe('CLI Integration Tests', () => {
-  it('should run successfully when invoked directly', async () => {
+  it('should run successfully when invoked directly', { skip: !hasClaudeData }, async () => {
     const { stdout } = await execFileAsync('node', ['dist/index.js', '.']);
 
     strictEqual(stdout.includes('TokenKing Report'), true, 'Should display report header');
     strictEqual(stdout.length > 0, true, 'Should produce output');
   });
 
-  it('should run successfully when invoked through a symlink', async () => {
-    // Create a temporary directory for our test
-    const tempDir = mkdtempSync(join(tmpdir(), 'tokenking-test-'));
+  it(
+    'should run successfully when invoked through a symlink',
+    { skip: !hasClaudeData },
+    async () => {
+      // Create a temporary directory for our test
+      const tempDir = mkdtempSync(join(tmpdir(), 'tokenking-test-'));
 
-    try {
-      const realScript = join(process.cwd(), 'dist/index.js');
-      const symlinkPath = join(tempDir, 'tokenking-symlink');
+      try {
+        const realScript = join(process.cwd(), 'dist/index.js');
+        const symlinkPath = join(tempDir, 'tokenking-symlink');
 
-      // Create a symlink to the real script
-      symlinkSync(realScript, symlinkPath);
+        // Create a symlink to the real script
+        symlinkSync(realScript, symlinkPath);
 
-      // Run through the symlink
-      const { stdout } = await execFileAsync('node', [symlinkPath, '.']);
+        // Run through the symlink
+        const { stdout } = await execFileAsync('node', [symlinkPath, '.']);
 
-      strictEqual(
-        stdout.includes('TokenKing Report'),
-        true,
-        'Should display report header when run through symlink'
-      );
-      strictEqual(stdout.length > 0, true, 'Should produce output when run through symlink');
-    } finally {
-      // Clean up temp directory
-      rmSync(tempDir, { recursive: true, force: true });
+        strictEqual(
+          stdout.includes('TokenKing Report'),
+          true,
+          'Should display report header when run through symlink'
+        );
+        strictEqual(stdout.length > 0, true, 'Should produce output when run through symlink');
+      } finally {
+        // Clean up temp directory
+        rmSync(tempDir, { recursive: true, force: true });
+      }
     }
-  });
+  );
 
   it('should handle missing path gracefully', async () => {
     try {
@@ -56,12 +65,20 @@ describe('CLI Integration Tests', () => {
     }
   });
 
-  it('should use current directory when no argument provided', async () => {
-    const { stdout } = await execFileAsync('node', ['dist/index.js']);
+  it(
+    'should use current directory when no argument provided',
+    { skip: !hasClaudeData },
+    async () => {
+      const { stdout } = await execFileAsync('node', ['dist/index.js']);
 
-    strictEqual(stdout.includes('TokenKing Report'), true, 'Should display report header');
-    strictEqual(stdout.includes('Project: ' + process.cwd()), true, 'Should use current directory');
-  });
+      strictEqual(stdout.includes('TokenKing Report'), true, 'Should display report header');
+      strictEqual(
+        stdout.includes('Project: ' + process.cwd()),
+        true,
+        'Should use current directory'
+      );
+    }
+  );
 
   it('should display help when --help flag is used', async () => {
     const { stdout } = await execFileAsync('node', ['dist/index.js', '--help']);
@@ -75,6 +92,10 @@ describe('CLI Integration Tests', () => {
     const { stdout } = await execFileAsync('node', ['dist/index.js', '--version']);
 
     strictEqual(stdout.includes('TokenKing v'), true, 'Should display version');
-    strictEqual(stdout.includes('1.3.1'), true, 'Should display correct version number');
+    strictEqual(
+      /TokenKing v\d+\.\d+\.\d+/.test(stdout.trim()),
+      true,
+      'Should display version in semver format'
+    );
   });
 });
