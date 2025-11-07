@@ -246,4 +246,10 @@ function main() {
   process.exit(0);
 }
 
-main();
+// Export functions for testing
+export { filterSessionsByPath, aggregateData, calculateDateRange };
+
+// Only run main if this file is executed directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main();
+}
