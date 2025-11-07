@@ -1,6 +1,12 @@
 # Run lint-staged (linter + formatter)
 npx lint-staged
 
+# Build TypeScript
+npm run build
+
+# Run tests
+npm test
+
 # Run gitleaks to prevent secrets from being committed
 if command -v gitleaks >/dev/null 2>&1; then
   gitleaks protect --staged --verbose
