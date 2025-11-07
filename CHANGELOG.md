@@ -1,3 +1,9 @@
+## [1.3.5](https://github.com/dreamiurg/tokenking/compare/v1.3.4...v1.3.5) (2025-11-07)
+
+### Bug Fixes
+
+- document --help and --version flags in README ([0b327fb](https://github.com/dreamiurg/tokenking/commit/0b327fbf82358d3156077fb1a107a0a4287def73))
+
 ## [1.3.4](https://github.com/dreamiurg/tokenking/compare/v1.3.3...v1.3.4) (2025-11-07)
 
 ### Bug Fixes
