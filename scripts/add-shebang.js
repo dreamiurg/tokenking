@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 
-import { readFileSync, writeFileSync, chmodSync } from 'fs';
+import { readFileSync, writeFileSync, chmodSync, existsSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distIndexPath = join(__dirname, '../dist/index.js');
+
+if (!existsSync(distIndexPath)) {
+  console.log('✓ Dist file not found, skipping shebang addition');
+  process.exit(0);
+}
 
 const content = readFileSync(distIndexPath, 'utf8');
 

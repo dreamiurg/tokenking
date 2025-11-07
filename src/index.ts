@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import path from 'node:path';
-import { existsSync } from 'node:fs';
+import { existsSync, realpathSync, readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import pc from 'picocolors';
 import { loadSessionData } from 'ccusage/data-loader';
 
@@ -233,13 +234,64 @@ function displayReport(targetPath: string, data: AggregatedData | null): void {
 }
 
 /**
+ * Display help message
+ */
+function displayHelp(): void {
+  console.log(`
+${pc.cyan(pc.bold('TokenKing'))} - Analyze Claude Code token usage for a specific project
+
+${pc.bold('Usage:')}
+  tokenking [path]           Analyze token usage for a project directory
+  tokenking --help           Display this help message
+  tokenking --version        Display version information
+
+${pc.bold('Arguments:')}
+  path                       Path to the project directory (default: current directory)
+
+${pc.bold('Examples:')}
+  tokenking .                Analyze current directory
+  tokenking ~/my-project     Analyze specific project
+  tokenking /path/to/project Analyze project at absolute path
+
+${pc.bold('Description:')}
+  TokenKing analyzes Claude Code session data to show token usage,
+  costs, and activity for a specific project directory.
+`);
+}
+
+/**
+ * Display version information
+ */
+function displayVersion(): void {
+  try {
+    const packageJsonPath = fileURLToPath(new URL('../package.json', import.meta.url));
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
+    console.log(`TokenKing v${packageJson.version}`);
+  } catch {
+    console.log('TokenKing (version unknown)');
+  }
+}
+
+/**
  * Main function
  */
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
 
-  // Get target path from args or use current directory
-  const targetPath = args[0] || '.';
+  // Handle --help flag
+  if (args.includes('--help') || args.includes('-h')) {
+    displayHelp();
+    return;
+  }
+
+  // Handle --version flag
+  if (args.includes('--version') || args.includes('-v')) {
+    displayVersion();
+    return;
+  }
+
+  // Get target path from args (filter out any flags) or use current directory
+  const targetPath = args.find((arg) => !arg.startsWith('-')) || '.';
 
   // Validate path exists
   if (!existsSync(targetPath)) {
@@ -268,7 +320,10 @@ async function main(): Promise<void> {
 }
 
 // Only run main if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Resolve symlinks to handle npm global installs
+const scriptPath = fileURLToPath(import.meta.url);
+const argPath = realpathSync(process.argv[1]);
+if (scriptPath === argPath) {
   main().catch((error) => {
     console.error(pc.red('Unexpected error:'), error);
     process.exit(1);
