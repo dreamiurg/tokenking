@@ -1,3 +1,9 @@
+## [1.3.1](https://github.com/dreamiurg/tokenking/compare/v1.3.0...v1.3.1) (2025-11-07)
+
+### Bug Fixes
+
+- publish workflow and duplicate shebang issues ([6d9ed37](https://github.com/dreamiurg/tokenking/commit/6d9ed37b2c329067ede43fc991f8409d1701c98c))
+
 # [1.3.0](https://github.com/dreamiurg/tokenking/compare/v1.2.0...v1.3.0) (2025-11-07)
 
 ### Features
