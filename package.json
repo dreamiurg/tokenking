@@ -13,7 +13,21 @@
   ],
   "scripts": {
     "start": "node src/index.js",
+    "test": "node --test test/*.test.js",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky",
     "semantic-release": "semantic-release"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml}": [
+      "prettier --write"
+    ]
   },
   "repository": {
     "type": "git",
@@ -37,6 +51,12 @@
     "picocolors": "^1.1.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "eslint": "^9.39.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
+    "prettier": "^3.6.2",
     "semantic-release": "^24.2.0"
   },
   "engines": {

@@ -3,10 +3,7 @@
 import { execSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import pc from 'picocolors';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * Format a number with thousand separators
@@ -45,7 +42,7 @@ function filterSessionsByPath(sessions, targetPath) {
   const normalizedTarget = path.resolve(targetPath);
   const targetBasename = path.basename(normalizedTarget);
 
-  return sessions.filter(session => {
+  return sessions.filter((session) => {
     // ccusage uses sessionId as path-like identifier, but also has projectPath
     // Check if the session's projectPath matches
     if (session.projectPath && session.projectPath !== 'Unknown Project') {
@@ -96,7 +93,7 @@ function aggregateData(sessions) {
     sessionPaths: new Set(),
   };
 
-  sessions.forEach(session => {
+  sessions.forEach((session) => {
     result.totalInputTokens += session.inputTokens || 0;
     result.totalOutputTokens += session.outputTokens || 0;
     result.totalCacheCreationTokens += session.cacheCreationTokens || 0;
@@ -116,7 +113,7 @@ function aggregateData(sessions) {
 
     // Collect models
     if (session.modelsUsed && Array.isArray(session.modelsUsed)) {
-      session.modelsUsed.forEach(model => result.models.add(model));
+      session.modelsUsed.forEach((model) => result.models.add(model));
     }
 
     // Track session IDs
@@ -177,7 +174,7 @@ function displayReport(targetPath, data) {
     // Only show if multiple paths or path doesn't match exactly
     if (pathArray.length > 1 || pathArray[0] !== targetSessionId) {
       console.log(pc.bold('Matched Paths:'));
-      pathArray.forEach(sessionPath => {
+      pathArray.forEach((sessionPath) => {
         const isExact = sessionPath === targetSessionId;
         if (isExact) {
           console.log(pc.dim('  •'), pc.green(sessionPath), pc.dim('(exact)'));
@@ -204,7 +201,7 @@ function displayReport(targetPath, data) {
 
   if (data.models.size > 0) {
     console.log(pc.bold('Models Used:'));
-    Array.from(data.models).forEach(model => {
+    Array.from(data.models).forEach((model) => {
       console.log(pc.dim('  •'), model);
     });
     console.log('');

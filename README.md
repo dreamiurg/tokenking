@@ -1,10 +1,17 @@
 # TokenKing
 
+[![npm version](https://img.shields.io/npm/v/tokenking.svg)](https://www.npmjs.com/package/tokenking)
+[![npm downloads](https://img.shields.io/npm/dm/tokenking.svg)](https://www.npmjs.com/package/tokenking)
+[![CI/Release](https://github.com/dreamiurg/tokenking/actions/workflows/release.yml/badge.svg)](https://github.com/dreamiurg/tokenking/actions/workflows/release.yml)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A simple CLI tool that shows how much Claude Code usage a specific project has consumed.
 
 ## What it does
 
 Analyzes your Claude Code session history and shows aggregated statistics for a specific project:
+
 - Total sessions and date range
 - Token usage (input, output, cache creation/read)
 - Models used
@@ -18,19 +25,24 @@ Analyzes your Claude Code session history and shows aggregated statistics for a 
 ## Installation
 
 ```bash
-git clone https://github.com/dreamiurg/tokenking.git
-cd tokenking
-npm install
+# Install globally
+npm install -g tokenking
+
+# Or use with npx (no installation required)
+npx tokenking ~/src/my-project
 ```
 
 ## Usage
 
 ```bash
 # Analyze current directory
-node src/index.js .
+tokenking .
 
 # Analyze specific project
-node src/index.js ~/src/my-project
+tokenking ~/src/my-project
+
+# Or use with npx
+npx tokenking ~/src/my-project
 ```
 
 ## Example Output

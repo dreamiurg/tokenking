@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run lint-staged (linter + formatter)
+npx lint-staged
+
+# Run gitleaks to prevent secrets from being committed
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks protect --staged --verbose
+else
+  echo "⚠️  Warning: gitleaks not found. Install with: brew install gitleaks"
+  echo "   Skipping secret scanning..."
+fi
